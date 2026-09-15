@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CineMarket · Votre studio. Vos blockbusters.</title>
+<meta name="description" content="CineMarket, le jeu de gestion de studio de cinéma sur iPhone : tournez, sortez, pariez, montez en ligue.">
+<style>
+  :root{--ink:#2A1B4E;--pink:#FF4FA3;--purple:#7A5CFF;--mint:#5EF0C0;--yellow:#FFE55C}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);
+    background:linear-gradient(135deg,#BFE3FF 0%,#E3C8FF 30%,#FFC9EA 55%,#FFF1B8 80%,#C9F7EF 100%);min-height:100vh}
+  main{max-width:520px;margin:0 auto;padding:48px 20px 64px}
+  h1{font-size:2.6rem;margin:0 0 4px;letter-spacing:-.02em}
+  .tag{font-weight:800;font-size:1rem;margin:0 0 28px}
+  .win{background:rgba(247,243,255,.96);border:2px solid var(--ink);border-radius:14px;box-shadow:5px 5px 0 var(--ink);overflow:hidden;margin:18px 0}
+  .win .bar{background:linear-gradient(90deg,#A9D7FF,#FFB8E3);border-bottom:2px solid var(--ink);padding:8px 14px;font-weight:900;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+  .win .body{padding:18px 16px}
+  .code{font-size:2.2rem;font-weight:900;letter-spacing:.35em;text-align:center;padding:14px 0;background:#fff;border:2px solid var(--ink);border-radius:12px;margin:10px 0 14px;user-select:all}
+  .btn{display:block;text-align:center;text-decoration:none;color:#fff;font-weight:900;text-transform:uppercase;font-size:.95rem;
+    padding:15px 18px;border-radius:999px;border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);
+    background:linear-gradient(180deg,#FF8AC6,#FF3D9A);margin:10px 0}
+  .btn.ghost{background:rgba(255,255,255,.8);color:var(--ink)}
+  p{line-height:1.55;margin:.5em 0}
+  ul{padding-left:20px;line-height:1.6}
+  footer{margin-top:36px;font-size:.85rem;opacity:.75}
+  footer a{color:var(--purple)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>CineMarket</h1>
+  <p class="tag">Votre studio. Vos blockbusters.</p>
+
+  <section id="invite" class="win hidden">
+    <div class="bar">Coproduction</div>
+    <div class="body">
+      <p>Un studio vous invite à coproduire son prochain film. Votre code :</p>
+      <div class="code" id="code"></div>
+      <a class="btn" id="open" href="#">Ouvrir dans CineMarket</a>
+      <p>Pas encore l'app ? Installez-la, créez votre studio, puis saisissez ce code dans <strong>Studio › Coproduction</strong>. Vous gagnez 5 crédits chacun.</p>
+    </div>
+  </section>
+
+  <section class="win">
+    <div class="bar">Le jeu</div>
+    <div class="body">
+      <p>Fondez votre studio, choisissez vos scripts, signez des talents, sortez vos films en temps réel et affrontez trente studios chaque semaine en ligue. Pariez sur la Bourse du cinéma, collectionnez les stickers, grimpez de rang d'Indie à Immortel.</p>
+      <ul>
+        <li>Tournages en temps réel avec dilemmes de production</li>
+        <li>Bourse du cinéma : actions, dividendes, paris Long / Short</li>
+        <li>Ligue hebdomadaire, saison de six semaines, classement mondial</li>
+        <li>Widgets, Dynamic Island et Centre de contrôle</li>
+      </ul>
+      <a class="btn" id="store" href="https://apps.apple.com/app/cinemarket/id0000000000">Télécharger sur l'App Store</a>
+    </div>
+  </section>
+
+  <footer>
+    <a href="privacy.html">Confidentialité</a> · <a href="terms.html">Conditions d'utilisation</a> · Contact : <a href="mailto:willi24n@gmail.com">willi24n@gmail.com</a>
+  </footer>
+</main>
+<script>
+  (function () {
+    var m = /[?&]invite=([A-Za-z0-9]{4,8})/.exec(location.search);
+    if (!m) return;
+    var code = m[1].toUpperCase();
+    document.getElementById('code').textContent = code;
+    document.getElementById('open').href = 'cinemarket://invite/' + code;
+    document.getElementById('invite').classList.remove('hidden');
+  })();
+</script>
+</body>
+</html>
