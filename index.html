@@ -21,6 +21,7 @@
     padding:15px 18px;border-radius:999px;border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);
     background:linear-gradient(180deg,#FF8AC6,#FF3D9A);margin:10px 0}
   .btn.ghost{background:rgba(255,255,255,.8);color:var(--ink)}
+  button.btn{width:100%;font-family:inherit;cursor:pointer}
   p{line-height:1.55;margin:.5em 0}
   ul{padding-left:20px;line-height:1.6}
   footer{margin-top:36px;font-size:.85rem;opacity:.75}
@@ -38,8 +39,10 @@
     <div class="body">
       <p>Un studio vous invite à coproduire son prochain film. Votre code :</p>
       <div class="code" id="code"></div>
+      <button class="btn ghost" id="copy" type="button">Copier le code</button>
       <a class="btn" id="open" href="#">Ouvrir dans CineMarket</a>
-      <p>Pas encore l'app ? Installez-la, créez votre studio, puis saisissez ce code dans <strong>Studio › Coproduction</strong>. Vous gagnez 5 crédits chacun.</p>
+      <p>Pas encore l'app ? Copiez ce code, installez CineMarket, créez votre studio, puis saisissez-le dans <strong>Studio › Coproduction</strong> (dans les 14 jours).</p>
+      <p>Vous gagnez <strong>3 crédits chacun</strong> à la signature, puis <strong>12 crédits chacun</strong> à votre troisième film. Vos deux noms signent votre prochain film.</p>
     </div>
   </section>
 
@@ -58,7 +61,7 @@
   </section>
 
   <footer>
-    <a href="privacy.html">Confidentialité</a> · <a href="terms.html">Conditions d'utilisation</a> · Contact : <a href="mailto:willi24n@gmail.com">willi24n@gmail.com</a>
+    <a href="privacy.html">Confidentialité</a> · <a href="terms.html">Conditions d'utilisation</a> · Contact : <a href="mailto:williandua@icloud.com">williandua@icloud.com</a>
   </footer>
 </main>
 <script>
@@ -69,6 +72,18 @@
     document.getElementById('code').textContent = code;
     document.getElementById('open').href = 'cinemarket://invite/' + code;
     document.getElementById('invite').classList.remove('hidden');
+    // Le lien « Ouvrir » ne sert à rien tant que l'app n'est pas installée : le code doit survivre à l'installation.
+    var copy = document.getElementById('copy');
+    copy.addEventListener('click', function () {
+      function done() { copy.textContent = 'Code copié'; setTimeout(function () { copy.textContent = 'Copier le code'; }, 2500); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(document.getElementById('code'));
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        try { if (document.execCommand('copy')) done(); } catch (e) {}
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(done, fallback);
+      else fallback();
+    });
   })();
 </script>
 </body>
