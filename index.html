@@ -4,7 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CineMarket · Votre studio. Vos blockbusters.</title>
-<meta name="description" content="CineMarket, le jeu de gestion de studio de cinéma sur iPhone : tournez, sortez, pariez, montez en ligue.">
+<meta name="description" content="CineMarket, le jeu de gestion de studio de cinéma sur iPhone : choisissez un scénario, tournez en temps réel, découvrez votre box-office, montez en ligue.">
+<!-- Aperçu du lien dans Messages, WhatsApp, Discord… Le titre et la description sont ceux de la page ;
+     l'image (1200 × 630) reste à rendre depuis l'app (docs/og.png) : tant qu'elle n'existe pas, la balise
+     reste commentée — une image cassée fait un aperçu vide, pas d'image fait un aperçu texte. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CineMarket">
+<meta property="og:title" content="CineMarket · Votre studio. Vos blockbusters.">
+<meta property="og:description" content="Le jeu de gestion de studio de cinéma sur iPhone : choisissez un scénario, tournez en temps réel, découvrez votre box-office, montez en ligue.">
+<meta property="og:url" content="https://williandua.github.io/cinemarket-web/">
+<meta property="og:locale" content="fr_FR">
+<!-- <meta property="og:image" content="https://williandua.github.io/cinemarket-web/og.png"> -->
+<meta name="twitter:card" content="summary">
+<!-- Bannière App Store (Safari iOS) : à décommenter quand l'app est publiée, avec son identifiant.
+     Elle ouvre l'app si elle est installée (le code de mécénat passe dans app-argument).
+<meta name="apple-itunes-app" content="app-id=0000000000, app-argument=cinemarket://invite/">
+-->
 <style>
   :root{--ink:#2A1B4E;--pink:#FF4FA3;--purple:#7A5CFF;--mint:#5EF0C0;--yellow:#FFE55C}
   *{box-sizing:border-box}
@@ -27,6 +42,7 @@
   footer{margin-top:36px;font-size:.85rem;opacity:.75}
   footer a{color:var(--purple)}
   .hidden{display:none}
+  .soon{font-weight:800;text-align:center;padding:14px 16px;border:2px dashed var(--ink);border-radius:12px;background:rgba(255,255,255,.55)}
 </style>
 </head>
 <body>
@@ -35,28 +51,30 @@
   <p class="tag">Votre studio. Vos blockbusters.</p>
 
   <section id="invite" class="win hidden">
-    <div class="bar">Coproduction</div>
+    <div class="bar">Mécénat</div>
     <div class="body">
-      <p>Un studio vous invite à coproduire son prochain film. Votre code :</p>
+      <p id="invite-lead">Un studio vous propose son mécénat. Votre code :</p>
       <div class="code" id="code"></div>
       <button class="btn ghost" id="copy" type="button">Copier le code</button>
       <a class="btn" id="open" href="#">Ouvrir dans CineMarket</a>
-      <p>Pas encore l'app ? Copiez ce code, installez CineMarket, créez votre studio, puis saisissez-le dans <strong>Studio › Coproduction</strong> (dans les 14 jours).</p>
-      <p>Vous gagnez <strong>3 crédits chacun</strong> à la signature, puis <strong>12 crédits chacun</strong> à votre troisième film. Vos deux noms signent votre prochain film.</p>
+      <p>Pas encore l'app ? Copiez ce code, installez CineMarket, créez votre studio, puis saisissez-le à la fondation ou dans <strong>Studio › Mécénat</strong> (dans les 14 jours).</p>
+      <p>Le nom de son studio signera le générique de votre premier film. Vous gagnez <strong>3 crédits chacun</strong> à la signature, puis <strong>12 crédits chacun</strong> à votre troisième film.</p>
     </div>
   </section>
 
   <section class="win">
     <div class="bar">Le jeu</div>
     <div class="body">
-      <p>Fondez votre studio, choisissez vos scripts, signez des talents, sortez vos films en temps réel et affrontez trente studios chaque semaine en ligue. Pariez sur la Bourse du cinéma, collectionnez les stickers, grimpez de rang d'Indie à Immortel.</p>
+      <p>Fondez votre studio, choisissez vos scénarios, signez des talents, sortez vos films en temps réel et découvrez leur box-office. Chaque semaine, une ligue de vingt-quatre studios ; toutes les six semaines, une saison. Une Bourse du cinéma pour investir dans les films du monde, un album d'objets à compléter, des rangs d'Indépendant à Immortel.</p>
       <ul>
-        <li>Tournages en temps réel avec dilemmes de production</li>
-        <li>Bourse du cinéma : actions, dividendes, paris Long / Short</li>
+        <li>Tournages en temps réel, avec les décisions d'une vraie production</li>
+        <li>Bourse du cinéma : actions, dividendes, pronostics</li>
         <li>Ligue hebdomadaire, saison de six semaines, classement mondial</li>
-        <li>Widgets, Dynamic Island et Centre de contrôle</li>
+        <li>Widgets, Dynamic Island, Centre de contrôle et Siri</li>
       </ul>
-      <a class="btn" id="store" href="https://apps.apple.com/app/cinemarket/id0000000000">Télécharger sur l'App Store</a>
+      <!-- Deux états : avant la publication (identifiant vide → « bientôt »), après (le bouton App Store). -->
+      <p class="soon" id="soon">Bientôt sur l'App Store.</p>
+      <a class="btn hidden" id="store" href="#">Télécharger sur l'App Store</a>
     </div>
   </section>
 
@@ -66,9 +84,28 @@
 </main>
 <script>
   (function () {
+    // Identifiant App Store : vide tant que l'app n'est pas publiée (état A : « bientôt »), puis
+    // l'identifiant numérique (état B : le bouton). Une seule constante à changer.
+    var APP_STORE_ID = '';
+    if (APP_STORE_ID) {
+      var store = document.getElementById('store');
+      store.href = 'https://apps.apple.com/app/id' + APP_STORE_ID;
+      store.classList.remove('hidden');
+      document.getElementById('soon').classList.add('hidden');
+    }
+
     var m = /[?&]invite=([A-Za-z0-9]{4,8})/.exec(location.search);
     if (!m) return;
     var code = m[1].toUpperCase();
+    // « X vous invite » : le nom du studio arrive encodé dans la requête (&s=). Il est écrit en TEXTE,
+    // jamais injecté en HTML — un nom de studio est écrit par un joueur.
+    var s = /[?&]s=([^&]+)/.exec(location.search);
+    if (s) {
+      var name = '';
+      try { name = decodeURIComponent(s[1].replace(/\+/g, ' ')); } catch (e) { name = ''; }
+      name = name.replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 40);
+      if (name) document.getElementById('invite-lead').textContent = '« ' + name + ' » vous propose son mécénat. Votre code :';
+    }
     document.getElementById('code').textContent = code;
     document.getElementById('open').href = 'cinemarket://invite/' + code;
     document.getElementById('invite').classList.remove('hidden');
