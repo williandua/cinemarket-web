@@ -16,10 +16,8 @@
 <meta property="og:locale" content="fr_FR">
 <!-- <meta property="og:image" content="https://williandua.github.io/cinemarket-web/og.png"> -->
 <meta name="twitter:card" content="summary">
-<!-- Bannière App Store (Safari iOS) : à décommenter quand l'app est publiée, avec son identifiant.
-     Elle ouvre l'app si elle est installée (le code de mécénat passe dans app-argument).
-<meta name="apple-itunes-app" content="app-id=0000000000, app-argument=cinemarket://invite/">
--->
+<!-- Bannière App Store (Safari iOS) : elle ouvre l'app si elle est installée (le code de mécénat passe dans app-argument). -->
+<meta name="apple-itunes-app" content="app-id=6816760459, app-argument=cinemarket://invite/">
 <style>
   :root{--ink:#2A1B4E;--pink:#FF4FA3;--purple:#7A5CFF;--mint:#5EF0C0;--yellow:#FFE55C}
   *{box-sizing:border-box}
@@ -86,7 +84,7 @@
   (function () {
     // Identifiant App Store : vide tant que l'app n'est pas publiée (état A : « bientôt »), puis
     // l'identifiant numérique (état B : le bouton). Une seule constante à changer.
-    var APP_STORE_ID = '';
+    var APP_STORE_ID = '6816760459';
     if (APP_STORE_ID) {
       var store = document.getElementById('store');
       store.href = 'https://apps.apple.com/app/id' + APP_STORE_ID;
